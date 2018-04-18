@@ -14,7 +14,7 @@ class ContainerController extends Controller
      */
     public function index(Request $request)
     {
-        $host = Host::find($request->host_id)->containers;
+        $host = Host::find($request->input('host_id'))->containers;
         // $client = new \GuzzleHttp\Client();
         // $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/containers/json?all=1');
 

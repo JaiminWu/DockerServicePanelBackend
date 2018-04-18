@@ -15,7 +15,7 @@ class ImageController extends Controller
      */
     public function index(Request $request)
     {
-      $host = Host::find($request->host_id);
+      $host = Host::find($request->input('host_id'));
       $client = new \GuzzleHttp\Client();
       $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/images/json');
       return $res->getBody();
