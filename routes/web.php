@@ -38,7 +38,3 @@ Route::get('/images', function() {
     $res = $client->request('GET', 'http://203.195.156.188:2375/images/json');
     echo $res->getBody();
 });
-
-Route::get('/test', function() {
-    dd(Request::ip());
-});
