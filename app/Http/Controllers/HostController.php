@@ -14,7 +14,8 @@ class HostController extends Controller
      */
     public function index()
     {
-        //
+        $hosts = Host::all();
+        return compact('hosts');
     }
 
     /**
@@ -33,9 +34,11 @@ class HostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Host $host)
     {
         //
+        $host->fill($request->all());
+        $host->save();
     }
 
     /**
@@ -46,7 +49,7 @@ class HostController extends Controller
      */
     public function show(Host $host)
     {
-        //
+        return compact('host');
     }
 
     /**
@@ -80,6 +83,6 @@ class HostController extends Controller
      */
     public function destroy(Host $host)
     {
-        //
+        $host->delete();
     }
 }
