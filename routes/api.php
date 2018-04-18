@@ -33,5 +33,5 @@ Route::apiResource('images', 'ImageController');
 Route::apiResource('logs', 'LogController');
 
 Route::get('/test', function (Request $request) {
-    return  $request->input('host_id');
+    return  $request->all();
 });
