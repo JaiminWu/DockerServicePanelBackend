@@ -31,3 +31,7 @@ Route::get('/containers/{id}/logs', 'ContainerController@logs');
 Route::apiResource('hosts', 'HostController');
 Route::apiResource('images', 'ImageController');
 Route::apiResource('logs', 'LogController');
+
+Route::get('/test', function (Request $request) {
+    return  $request->all();
+});
