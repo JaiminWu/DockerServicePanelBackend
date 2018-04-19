@@ -15,12 +15,12 @@ class ImageController extends Controller
      */
     public function index(Request $request)
     {
-      // $host = Host::find($request->input('host_id'));
-      // $client = new \GuzzleHttp\Client();
-      // $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/images/json');
-      // return $res->getBody();
-      $host = Host::find($request->host_id)->images;
-      return compact('host');
+      $host = Host::find($request->input('host_id'));
+      $client = new \GuzzleHttp\Client();
+      $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/images/json');
+      return $res->getBody();
+      // $host = Host::find($request->host_id)->images;
+      // return compact('host');
     }
 
     /**
@@ -30,12 +30,7 @@ class ImageController extends Controller
      */
     public function create()
     {
-        //
-        $authentication = array('username' => '',
-                                'password' => '',
-                                'email' => '',
-                                'serveraddress' => '',);
-        $header = array('X-Registry-Auth' => base64_encode(json_encode($authentication)));
+
 
     }
 
@@ -47,7 +42,27 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $host = Host::find($request->post('host_id'));
+      $querys = $request->post();
+      unset($querys['host_id']);
+      $authentication = array('username' => 'jaiminwu',
+                              'password' => 'Jaimin011210.',
+                              'email' => 'JaiminWu1025@gmail.com',
+                              'serveraddress' => $host->host,);
+      $headers = array('X-Registry-Auth' => base64_encode(json_encode($authentication)));
+      $client = new \GuzzleHttp\Client();
+      $res = $client->request('POST', 'http://'.$host->host.':'.$host->port.'/images/create', [
+          'headers' => $headers,
+          'query' => $querys,
+      ]);
+      if($res->getStatusCode() != 200){
+        return $res->getBody();
+      }
+      $image = new Image;
+      $image->name = $querys['name'];
+      $image->host_id = $request->post('host_id');
+      $image->save();
+      return compact('image');
     }
 
     /**

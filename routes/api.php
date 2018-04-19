@@ -29,6 +29,7 @@ Route::delete('/containers/{id}/remove', 'ContainerController@remove');
 Route::get('/containers/{id}/top', 'ContainerController@top');
 Route::get('/containers/{id}/logs', 'ContainerController@logs');
 Route::apiResource('hosts', 'HostController');
+Route::post('/hosts/{id}/createContainer', 'HostController@createContainer');
 Route::apiResource('images', 'ImageController');
 Route::apiResource('logs', 'LogController');
 

@@ -14,11 +14,12 @@ class ContainerController extends Controller
      */
     public function index(Request $request)
     {
-        $host = Host::find($request->input('host_id'))->containers;
-        // $client = new \GuzzleHttp\Client();
-        // $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/containers/json?all=1');
-
-        return compact('host');
+        $host = Host::find($request->input('host_id'));
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/containers/json?all=1');
+        return $res->getBody();
+        // $host = Host::find($request->input('host_id'))->containers;
+        // return compact('host');
     }
 
     /**
@@ -102,7 +103,12 @@ class ContainerController extends Controller
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
       $res = $client->request('POST', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/start');
-      return $res->getBody();
+      if($res->getStatusCode() != 204){
+        return $res->getBody();
+      }
+      $container->status = 'running';
+      $container->save();
+      return compact('container');
     }
 
     public function stop($id)
@@ -110,7 +116,12 @@ class ContainerController extends Controller
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
       $res = $client->request('POST', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/stop');
-      return $res->getBody();
+      if($res->getStatusCode() != 204){
+        return $res->getBody();
+      }
+      $container->status = 'exited';
+      $container->save();
+      return compact('container');
     }
 
     public function restart($id)
@@ -118,7 +129,12 @@ class ContainerController extends Controller
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
       $res = $client->request('POST', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/restart');
-      return $res->getBody();
+      if($res->getStatusCode() != 204){
+        return $res->getBody();
+      }
+      $container->status = 'running';
+      $container->save();
+      return compact('container');
     }
 
     public function kill($id)
@@ -126,7 +142,12 @@ class ContainerController extends Controller
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
       $res = $client->request('POST', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/kill');
-      return $res->getBody();
+      if($res->getStatusCode() != 204){
+        return $res->getBody();
+      }
+      $container->status = 'deaded';
+      $container->save();
+      return compact('container');
     }
 
     public function pause($id)
@@ -134,7 +155,12 @@ class ContainerController extends Controller
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
       $res = $client->request('POST', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/pause');
-      return $res->getBody();
+      if($res->getStatusCode() != 204){
+        return $res->getBody();
+      }
+      $container->status = 'paused';
+      $container->save();
+      return compact('container');
     }
 
     public function unpause($id)
@@ -142,7 +168,12 @@ class ContainerController extends Controller
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
       $res = $client->request('POST', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/unpause');
-      return $res->getBody();
+      if($res->getStatusCode() != 204){
+        return $res->getBody();
+      }
+      $container->status = 'running';
+      $container->save();
+      return compact('container');
     }
 
     public function remove($id)
@@ -150,7 +181,11 @@ class ContainerController extends Controller
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
       $res = $client->request('DELETE', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/remove');
-      return $res->getBody();
+      if($res->getStatusCode() != 204){
+        return $res->getBody();
+      }
+      $container->delete();
+      return 'success';
     }
 
     public function top($id)
@@ -165,8 +200,9 @@ class ContainerController extends Controller
     {
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
-      $res = $client->request('get', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/logs?stdout=true&since=1&until='.time());
+      $res = $client->request('get', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/logs?follow=1&stdout=true&since='.strtotime('7 days ago').'&until='.time());
       return $res->getBody();
+
     }
 
 }

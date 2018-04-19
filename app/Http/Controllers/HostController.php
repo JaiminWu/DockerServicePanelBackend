@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Host;
 use Illuminate\Http\Request;
+use App\Container;
 
 class HostController extends Controller
 {
@@ -84,5 +85,27 @@ class HostController extends Controller
     public function destroy(Host $host)
     {
         $host->delete();
+    }
+
+    public function createContainer(Request $request, $id){
+      $host = Host::find($id);
+      $client = new \GuzzleHttp\Client();
+      $res = $client->request('POST',
+      'http://'.$host->host.':'.$host->port.'/containers/create?name='.$request->get('name'),
+      ['json' => $request->post()]
+      );
+      if($res->getStatusCode() != 201){
+        return $res->getBody();
+      }
+      $contain_info = json_decode($res->getBody(),true);
+      $container = new Container;
+      $container->key = $contain_info['Id'];
+      $container->name = $request->get('name');
+      $container->image_name = $request->post('Image');
+      $container->status = 'created';
+      $container->host_id = $id;
+      $container->command = json_encode($request->post('Cmd'));
+      $container->save();
+      return compact($container);
     }
 }
