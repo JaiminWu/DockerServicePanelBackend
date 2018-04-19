@@ -12,11 +12,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::apiResource('containers', 'ContainerController');
 Route::get('/containers/{id}/export', 'ContainerController@export');
 Route::post('/containers/{id}/stop', 'ContainerController@stop');
@@ -32,7 +27,3 @@ Route::apiResource('hosts', 'HostController');
 Route::post('/hosts/{id}/createContainer', 'HostController@createContainer');
 Route::apiResource('images', 'ImageController');
 Route::apiResource('logs', 'LogController');
-
-Route::get('/test', function (Request $request) {
-    return  $request->get('host_id');
-});
