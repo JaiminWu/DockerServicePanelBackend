@@ -38,3 +38,7 @@ Route::get('/images', function() {
     $res = $client->request('GET', 'http://203.195.156.188:2375/images/json');
     echo $res->getBody();
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
