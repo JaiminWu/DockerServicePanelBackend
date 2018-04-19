@@ -14,12 +14,12 @@ class ContainerController extends Controller
      */
     public function index(Request $request)
     {
-        $host = Host::find($request->input('host_id'));
-        $client = new \GuzzleHttp\Client();
-        $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/containers/json?all=1');
-        return $res->getBody();
-        // $host = Host::find($request->input('host_id'))->containers;
-        // return compact('host');
+        // $host = Host::find($request->input('host_id'));
+        // $client = new \GuzzleHttp\Client();
+        // $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/containers/json?all=1');
+        // return $res->getBody();
+        $host = Host::find($request->input('host_id'))->containers;
+        return compact('host');
     }
 
     /**
@@ -180,7 +180,7 @@ class ContainerController extends Controller
     {
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
-      $res = $client->request('DELETE', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/remove');
+      $res = $client->request('DELETE', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->name);
       if($res->getStatusCode() != 204){
         return $res->getBody();
       }
