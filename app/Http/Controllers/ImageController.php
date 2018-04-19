@@ -15,12 +15,20 @@ class ImageController extends Controller
      */
     public function index(Request $request)
     {
-      $host = Host::find($request->input('host_id'));
-      $client = new \GuzzleHttp\Client();
-      $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/images/json');
-      return $res->getBody();
-      // $host = Host::find($request->host_id)->images;
-      // return compact('host');
+      // $host = Host::find($request->input('host_id'));
+      // $client = new \GuzzleHttp\Client();
+      // $res = $client->request('GET', 'http://'.$host->host.':'.$host->port.'/images/json');
+      // return $res->getBody();
+      $hosts = Host::all();
+      $i = 0;
+      foreach ($hosts as $key => $value) {
+        $images = Image::where(['host_id' => $value['id'],])->get();
+        foreach ($images as $v) {
+          $host[$i] = $v;
+          $i++;
+        }
+      }
+      return $host;
     }
 
     /**
