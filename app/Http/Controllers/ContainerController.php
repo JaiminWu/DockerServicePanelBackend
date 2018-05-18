@@ -12,7 +12,7 @@ class ContainerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $host = Host::find($request->input('host_id'));
         $client = new \GuzzleHttp\Client();
