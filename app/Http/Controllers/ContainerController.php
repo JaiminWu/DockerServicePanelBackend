@@ -20,19 +20,19 @@ class ContainerController extends Controller
         // return $res->getBody();
         // $host = Host::find($request->host_id)->containers;
         $hosts = Host::all();
-        $client = new \GuzzleHttp\Client();
+        // $client = new \GuzzleHttp\Client();
         $i = 0;
-        $containers = array();
+        // $containers = array();
         foreach ($hosts as $key => $value) {
-          $containers = $client->request('GET', 'http://'.$value['host'].':'.$value['port'].'/containers/json?all=1');
-          // Container::where(['host_id' => $value['id'],])->get();
-          // foreach ($containers as $v) {
-            // $host[$i] = json_decode(json_encode($containers), true);
+          $containers = Container::where(['host_id' => $value['id'],])->get();
+          // $client->request('GET', 'http://'.$value['host'].':'.$value['port'].'/containers/json?all=1');
+          foreach ($containers as $v) {
+            $host[$i] = $v;
             $i++;
             // unset($containers);
-          // }
+          }
         }
-        return $containers;
+        return $host;
     }
 
     /**
