@@ -26,7 +26,7 @@ class ContainerController extends Controller
           $containers = $client->request('GET', 'http://'.$value['host'].':'.$value['port'].'/containers/json?all=1');
           // Container::where(['host_id' => $value['id'],])->get();
           // foreach ($containers as $v) {
-            $host[$i] = json_encode($containers);
+            $host[$i] = json_decode(json_encode($containers), true);
             $i++;
             unset($containers);
           // }
