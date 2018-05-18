@@ -25,12 +25,12 @@ class ContainerController extends Controller
         foreach ($hosts as $key => $value) {
           $containers = $client->request('GET', 'http://'.$value['host'].':'.$value['port'].'/containers/json?all=1');
           // Container::where(['host_id' => $value['id'],])->get();
-          // foreach ($containers as $v) {
-          //   $host[$i] = $v;
-          //   $i++;
-          // }
+          foreach ($containers as $v) {
+            $host[$i] = $v;
+            $i++;
+          }
         }
-        return $containers;
+        return $host;
     }
 
     /**
