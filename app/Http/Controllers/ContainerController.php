@@ -209,7 +209,7 @@ class ContainerController extends Controller
     {
       $container = Container::find($id);
       $client = new \GuzzleHttp\Client();
-      $res = $client->request('get', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/logs?follow=1&stdout=true&since='.strtotime('7 days ago').'&until='.time());
+      $res = $client->request('get', 'http://'.$container->host->host.':'.$container->host->port.'/containers/'.$container->key.'/logs?follow=false&stdout=true&since='.strtotime('7 days ago').'&until='.time());
       return $res->getBody();
 
     }
