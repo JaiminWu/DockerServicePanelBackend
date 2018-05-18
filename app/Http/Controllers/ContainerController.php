@@ -30,7 +30,7 @@ class ContainerController extends Controller
             $i++;
           // }
         }
-        return $containers;
+        return $host;
     }
 
     /**
