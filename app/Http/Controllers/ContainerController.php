@@ -24,11 +24,11 @@ class ContainerController extends Controller
         $i = 0;
         $containers = array();
         foreach ($hosts as $key => $value) {
-          $containers[$i] = $client->request('GET', 'http://'.$value['host'].':'.$value['port'].'/containers/json?all=1');
+          $containers = $client->request('GET', 'http://'.$value['host'].':'.$value['port'].'/containers/json?all=1');
           // Container::where(['host_id' => $value['id'],])->get();
           // foreach ($containers as $v) {
             // $host[$i] = json_decode(json_encode($containers), true);
-            // $i++;
+            $i++;
             // unset($containers);
           // }
         }
