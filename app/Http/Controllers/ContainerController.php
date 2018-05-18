@@ -23,14 +23,14 @@ class ContainerController extends Controller
         $client = new \GuzzleHttp\Client();
         $i = 0;
         foreach ($hosts as $key => $value) {
-          $containers = $client->request('GET', 'http://'.$value['host'].':'.$value['port'].'/containers/json?all=1');
+          $containers = json_decode($client->request('GET', 'http://'.$value['host'].':'.$value['port'].'/containers/json?all=1'), true);
           // Container::where(['host_id' => $value['id'],])->get();
           foreach ($containers as $v) {
             $host[$i] = $v;
             $i++;
           }
         }
-        return $containers;
+        return $host;
     }
 
     /**
